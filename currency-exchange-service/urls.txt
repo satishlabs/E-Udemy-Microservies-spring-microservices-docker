@@ -1,0 +1,63 @@
+
+Currency Exchange Service
+http://localhost:8000/currency-exchange/from/USD/to/INR
+
+Response Structure:
+{
+	"id:"10001,
+	"from":"USD",
+	"to":"INR",
+	"conversionMultiple":65.00,
+	"environment":"8000 instance-id"
+}
+
+
+Currency Conversion Service
+http://localhost:8100/currency-conversion/from/USD/to/INR/quantity/10
+http://localhost:8100/currency-conversion-feign/from/USD/to/INR/quantity/10
+{
+	"id":10001,
+	"from":"USD",
+	"to":"INR",
+	"conversionMultiple":65.00.
+	"quantity":10,
+	"totalCalculatedAmount":650.00,
+	"environment":"8000 instance-id"
+}
+
+
+Eureka-server:
+http://localhost:8761/
+
+API-GATEWAY
+---------------------
+Enable in ap-gateway application properties
+spring.cloud.gateway.discovery.locator.enabled=true
+
+http://localhost:8765/CURRENCY-EXCHANGE/currency-exchange/from/USD/to/INR
+http://localhost:8765/CURRENCY-CONVERSION/currency-conversion/from/USD/to/INR/quantity/10
+http://localhost:8765/CURRENCY-CONVERSION/currency-conversion-feign/from/USD/to/INR/quantity/10
+
+
+spring.cloud.gateway.discovery.locator.lowerCaseServiceId=true
+http://localhost:8765/currency-exchange/currency-exchange/from/USD/to/INR
+http://localhost:8765/currency-conversion/currency-conversion/from/USD/to/INR/quantity/10
+http://localhost:8765/currency-conversion/currency-conversion-feign/from/USD/to/INR/quantity/10
+
+# With Service Locator
+http://localhost:8765/currency-exchange/from/USD/to/INR
+http://localhost:8765/currency-conversion/from/USD/to/INR/quantity/10
+http://localhost:8765/currency-conversion-feign/from/USD/to/INR/quantity/10
+http://localhost:8765/currency-conversion-new/from/USD/to/INR/quantity/10
+
+
+#DOCKER:
+spring-boot:build-image -DskipTests
+
+#docker run -p 9411:9411 openzipkin/zipkin:2.23
+
+Images:
+docker.io/spd61185/mmv2-currency-exchange-service:0.0.1-SNAPSHOT
+docker.io/spd61185/mmv2-naming-server:0.0.1-SNAPSHOT
+docker.io/spd61185/mmv2-currency-conversion-service:0.0.1-SNAPSHOT
+docker.io/spd61185/mmv2-api-gateway:0.0.1-SNAPSHOT
